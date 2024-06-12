@@ -35,13 +35,13 @@ mkdir -pv /uny/sources
 cd /uny/sources || exit
 
 pkgname="libmaxminddb"
-pkggit="https://github.com/libmaxminddb/libmaxminddb.git refs/tags/*"
+pkggit="https://github.com/maxmind/libmaxminddb.git refs/tags/*"
 gitdepth="--depth=1"
 
 ### Get version info from git remote
 # shellcheck disable=SC2086
-latest_head="$(git ls-remote --refs --tags --sort="v:refname" $pkggit | grep -E "v[0-9.]+$" | tail --lines=1)"
-latest_ver="$(echo "$latest_head" | grep -o "v[0-9.].*" | sed "s|v||")"
+latest_head="$(git ls-remote --refs --tags --sort="v:refname" $pkggit | grep -E "/[0-9.]+$" | tail --lines=1)"
+latest_ver="$(echo "$latest_head" | grep -o "/[0-9.].*" | sed "s|/||")"
 latest_commit_id="$(echo "$latest_head" | cut --fields=1)"
 
 version_details
@@ -76,6 +76,8 @@ get_include_paths
 ### Start of individual build script
 
 unset LD_RUN_PATH
+
+./bootstrap
 
 ./configure \
     --prefix=/uny/pkg/"$pkgname"/"$pkgver"
